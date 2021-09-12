@@ -1,27 +1,21 @@
 package com.akvamarin.merge_sorting.options;
-import com.akvamarin.merge_sorting.options.comparators.Comp;
-import com.akvamarin.merge_sorting.options.comparators.SortASC;
-import com.akvamarin.merge_sorting.options.comparators.SortDESC;
-import com.akvamarin.merge_sorting.options.comparators.Sorting;
 import com.akvamarin.merge_sorting.options.params_app.DataType;
 import com.akvamarin.merge_sorting.options.params_app.TypeSort;
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
-public class Options{
+public class Options {
     List<File> inputFiles;
     DataType dataType;
     TypeSort typeSort;
     File output;
-    Sorting sortComparator;
 
     public Options(List<File> inputFiles, DataType dataType, TypeSort typeSort, File output){
         this.inputFiles = inputFiles;
         this.dataType = dataType;
         this.typeSort = typeSort;
         this.output = output;
-        this.sortComparator = (this.typeSort == TypeSort.DESC) ? new SortDESC() : new SortASC();
-
     }
 
     public List<File> getInputFiles() {
@@ -40,27 +34,21 @@ public class Options{
         return output;
     }
 
-    public Sorting getSortComparator() {
-        return sortComparator;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof Options){
+            Options options = (Options) obj;
+            return Objects.equals(inputFiles, options.inputFiles) &&
+                    dataType == options.dataType &&
+                    typeSort == options.typeSort &&
+                    Objects.equals(output, options.output);
+        }
+        return  false;
     }
 
-    public void setInputFiles(List<File> inputFiles) {
-        this.inputFiles = inputFiles;
-    }
-
-    public void setDataType(DataType dataType) {
-        this.dataType = dataType;
-    }
-
-    public void setTypeSort(TypeSort typeSort) {
-        this.typeSort = typeSort;
-    }
-
-    public void setOutput(File output) {
-        this.output = output;
-    }
-
-    public void setSortComparator(Sorting sortComparator) {
-        this.sortComparator = sortComparator;
+    @Override
+    public int hashCode() {
+        return Objects.hash(inputFiles, dataType, typeSort, output);
     }
 }
