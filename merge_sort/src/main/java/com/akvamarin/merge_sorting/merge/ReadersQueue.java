@@ -9,19 +9,18 @@ import com.akvamarin.merge_sorting.validators.DataValidator;
 import org.jetbrains.annotations.Nullable;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public abstract class ReadersQueue<K extends Comparable<K>> {
-    private final Queue<Map.Entry<K, BufferedReader>> linesReadersQueue;
+    private final Queue<Map.Entry<K, ReaderWithFile>> linesReadersQueue;
     private final Options options;
     private K previousLineInFile = null;
 
     public ReadersQueue(Options options){
         this.options = options;
 
-        Comparator<Map.Entry<K, BufferedReader>> sortComparator =
+        Comparator<Map.Entry<K, ReaderWithFile>> sortComparator =
                 (this.options.getTypeSort() == TypeSort.ASC) ? new SortASC<>() : new SortDESC<>();
 
         this.linesReadersQueue = new PriorityQueue<>(this.options.getInputFiles().size(), sortComparator);
@@ -37,8 +36,8 @@ public abstract class ReadersQueue<K extends Comparable<K>> {
         linesReadersQueue.clear();
 
         for (File file : inputFiles){
-            BufferedReader buffReader = new BufferedReader(new FileReader(file));
-            addNextElementInQueue(buffReader);
+            ReaderWithFile readerWithFile = new ReaderWithFile(file);
+            addNextElementInQueue(readerWithFile);
            /* String firstLine = buffReader.readLine();
             if (firstLine != null){
                 linesReadersQueue.offer(new AbstractMap.SimpleImmutableEntry<>(convert(firstLine), buffReader));
@@ -46,34 +45,40 @@ public abstract class ReadersQueue<K extends Comparable<K>> {
         }
     }
 
-    private void addNextElementInQueue(BufferedReader buffReader) throws IOException{
+    private void addNextElementInQueue(ReaderWithFile readerWithFile) throws IOException{
+        String fileName = readerWithFile.getFile().getName();
+        BufferedReader buffReader = readerWithFile.getBufferedReader();
         String nextLine =  buffReader.readLine();
 
         try {
             if (nextLine != null) {
-                K nextLineConvert = convert(nextLine);
-                linesReadersQueue.offer(new AbstractMap.SimpleImmutableEntry<>(nextLineConvert, buffReader));
+                K nextLineConvert = convert(nextLine, fileName);
+                linesReadersQueue.offer(new AbstractMap.SimpleImmutableEntry<>(nextLineConvert, readerWithFile));
             }
         } catch (NumberFormatException | EmptyLineException e) {
             System.err.println(e.getMessage());
-            addNextElementInQueue(buffReader);
+            addNextElementInQueue(readerWithFile);
         }
     }
 
     @Nullable
     public Optional<K> getMinMaxElement() throws IOException, IncorrectlySortedFileException {
-        Map.Entry<K, BufferedReader> elemReader = linesReadersQueue.poll();
-        BufferedReader buffReader = elemReader.getValue();
+        Map.Entry<K, ReaderWithFile> elemReader = linesReadersQueue.poll();
+
+        ReaderWithFile readerWithFile = elemReader.getValue();
+        String fileName = readerWithFile.getFile().getName();
+        BufferedReader buffReader = readerWithFile.getBufferedReader();
+
         K line = elemReader.getKey();
        // System.out.println(previousLineInFile);
        // System.out.println(line);
-        addNextElementInQueue(buffReader);
+        addNextElementInQueue(readerWithFile);
 
         if (line != null) {
             if (DataValidator.isCorrectOrderData(options.getTypeSort(),  previousLineInFile, line)){
                 return Optional.of(line);
             } else {
-                throw new IncorrectlySortedFileException("Нарушен порядок сортировки, данная строка будет пропущена: ", line.toString());
+                throw new IncorrectlySortedFileException("Нарушен порядок сортировки, данная строка будет пропущена: ", line.toString(), fileName);
             }
 
         } else {
@@ -86,7 +91,7 @@ public abstract class ReadersQueue<K extends Comparable<K>> {
         return linesReadersQueue.isEmpty();
     }
 
-    protected abstract K convert(String string) throws NumberFormatException, EmptyLineException;
+    protected abstract K convert(String string, String fileName) throws NumberFormatException, EmptyLineException;
 
     public void setPreviousLineInFile(K previousLineInFile) {
         this.previousLineInFile = previousLineInFile;

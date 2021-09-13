@@ -318,11 +318,11 @@ public class MergeFilesTest {
     private ReadersQueue<String> getStringReadersQueue(Options options){
         return new ReadersQueue<>(options) {
             @Override
-            protected String convert(String string) throws EmptyLineException {
+            protected String convert(String string, String fileName) throws EmptyLineException {
                 if (!string.isBlank()) {
                     return string.trim();
                 }
-                throw new EmptyLineException("Пустая строка в файле будет пропущена.");
+                throw new EmptyLineException(String.format("Файл %s: Пустая строка в файле будет пропущена.", fileName));
             }
         };
     }
@@ -330,11 +330,11 @@ public class MergeFilesTest {
     private ReadersQueue<Integer> getIntegerReadersQueue(Options options){
         return new ReadersQueue<>(options) {
             @Override
-            protected Integer convert(String string) throws NumberFormatException {
+            protected Integer convert(String string, String fileName) throws NumberFormatException {
                 if (DataValidator.isInteger(string.trim())) {
                     return Integer.valueOf(string.trim());
                 }
-                throw new NumberFormatException(String.format("Не удалось преобразовать строку %s в число, данная строка будет пропущена", string));
+                throw new NumberFormatException(String.format("Файл %s: Не удалось преобразовать строку %s в число, данная строка будет пропущена", fileName, string));
             }
         };
     }

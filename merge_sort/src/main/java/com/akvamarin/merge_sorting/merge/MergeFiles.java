@@ -24,7 +24,7 @@ public class MergeFiles<T extends Comparable<T>> {
                    }
 
                 } catch (IncorrectlySortedFileException e) {
-                    System.err.println(e.getMessage() + e.getLine());
+                    System.err.println(String.format("Файл %s: %s %s", e.getFileName(), e.getMessage(), e.getLine()));
                 }
             }
 
