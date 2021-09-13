@@ -38,10 +38,6 @@ public abstract class ReadersQueue<K extends Comparable<K>> {
         for (File file : inputFiles){
             ReaderWithFile readerWithFile = new ReaderWithFile(file);
             addNextElementInQueue(readerWithFile);
-           /* String firstLine = buffReader.readLine();
-            if (firstLine != null){
-                linesReadersQueue.offer(new AbstractMap.SimpleImmutableEntry<>(convert(firstLine), buffReader));
-            }*/
         }
     }
 
@@ -64,26 +60,27 @@ public abstract class ReadersQueue<K extends Comparable<K>> {
     @Nullable
     public Optional<K> getMinMaxElement() throws IOException, IncorrectlySortedFileException {
         Map.Entry<K, ReaderWithFile> elemReader = linesReadersQueue.poll();
+        if (elemReader != null) {
 
-        ReaderWithFile readerWithFile = elemReader.getValue();
-        String fileName = readerWithFile.getFile().getName();
-        BufferedReader buffReader = readerWithFile.getBufferedReader();
+            ReaderWithFile readerWithFile = elemReader.getValue();
+            String fileName = readerWithFile.getFile().getName();
+            BufferedReader buffReader = readerWithFile.getBufferedReader();
+            K line = elemReader.getKey();
 
-        K line = elemReader.getKey();
-       // System.out.println(previousLineInFile);
-       // System.out.println(line);
-        addNextElementInQueue(readerWithFile);
+            addNextElementInQueue(readerWithFile);
 
-        if (line != null) {
-            if (DataValidator.isCorrectOrderData(options.getTypeSort(),  previousLineInFile, line)){
-                return Optional.of(line);
+            if (line != null) {
+                if (DataValidator.isCorrectOrderData(options.getTypeSort(),  previousLineInFile, line)){
+                    return Optional.of(line);
+                } else {
+                    throw new IncorrectlySortedFileException("Нарушен порядок сортировки, данная строка будет пропущена: ", line.toString(), fileName);
+                }
+
             } else {
-                throw new IncorrectlySortedFileException("Нарушен порядок сортировки, данная строка будет пропущена: ", line.toString(), fileName);
+                buffReader.close();
             }
-
-        } else {
-            buffReader.close();
         }
+
         return Optional.empty();
     }
 
