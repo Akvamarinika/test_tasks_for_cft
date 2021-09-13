@@ -1,7 +1,7 @@
 # Инструкция по запуску merge_sort.jar:
 
-1. Скачать исполняемый файл merge_sort.jar 
-test_tasks_for_cft/merge_sort/out
+1. Скачать исполняемый файл merge_sort.jar  
+   test_tasks_for_cft/merge_sort/out
 
 2. Запуск приложения:
 java -jar <путь к merge_sort.jar> <тип данных> <имя выходного файла> <имя входного файла> <режим сортировки>
