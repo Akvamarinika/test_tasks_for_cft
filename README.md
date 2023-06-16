@@ -1,4 +1,4 @@
-# Инструкция по запуску merge_sort.jar:
+ # Инструкция по запуску merge_sort.jar:
 
 1. Скачать исполняемый файл merge_sort.jar  
    test_tasks_for_cft/merge_sort/out
@@ -15,27 +15,27 @@ java -jar <путь к merge_sort.jar> <режим сортировки> <тип
 
 # Примеры запуска из командной строки для Windows:
 
-## для целых чисел по возрастанию:
+##### для целых чисел по возрастанию:
 ```shell
-java -jar merge_sort.jar -i -a out.txt in1.txt in2.txt;
+java -jar merge_sort.jar -i -a out.txt in1.txt in2.txt
 ```
-## для строк по возрастанию:
+##### для строк по возрастанию:
 ```shell
-java -jar merge_sort.jar -s out.txt in1.txt in2.txt in3.txt;
+java -jar merge_sort.jar -s out.txt in1.txt in2.txt in3.txt
 ```
-## для строк по убыванию:
+##### для строк по убыванию:
 ```shell
-java -jar merge_sort.jar -d -s out.txt in1.txt in2.txt;
-```
-```shell
-java -jar merge_sort.jar --desc --string out.txt in1.txt in2.txt;
-```
-## вызов справки:
-```shell
-java -jar merge_sort.jar -h;
+java -jar merge_sort.jar -d -s out.txt in1.txt in2.txt
 ```
 ```shell
-java -jar merge_sort.jar --help;
+java -jar merge_sort.jar --desc --string out.txt in1.txt in2.txt
+```
+##### вызов справки:
+```shell
+java -jar merge_sort.jar -h
+```
+```shell
+java -jar merge_sort.jar --help
 ```
 
 
