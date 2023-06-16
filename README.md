@@ -27,7 +27,6 @@ java -jar merge_sort.jar -s out.txt in1.txt in2.txt in3.txt;
 ```shell
 java -jar merge_sort.jar -d -s out.txt in1.txt in2.txt;
 ```
-## для строк по убыванию:
 ```shell
 java -jar merge_sort.jar --desc --string out.txt in1.txt in2.txt;
 ```
