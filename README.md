@@ -15,23 +15,28 @@ java -jar <путь к merge_sort.jar> <режим сортировки> <тип
 
 # Примеры запуска из командной строки для Windows:
 
+## для целых чисел по возрастанию:
 ```shell
-java -jar merge_sort.jar -i -a out.txt in1.txt in2.txt (для целых чисел по возрастанию);
+java -jar merge_sort.jar -i -a out.txt in1.txt in2.txt;
+```
+## для строк по возрастанию:
+```shell
+java -jar merge_sort.jar -s out.txt in1.txt in2.txt in3.txt;
+```
+## для строк по убыванию:
+```shell
+java -jar merge_sort.jar -d -s out.txt in1.txt in2.txt;
+```
+## для строк по убыванию:
+```shell
+java -jar merge_sort.jar --desc --string out.txt in1.txt in2.txt;
+```
+## вызов справки:
+```shell
+java -jar merge_sort.jar -h;
 ```
 ```shell
-java -jar merge_sort.jar -s out.txt in1.txt in2.txt in3.txt (для строк по возрастанию);
-```
-```shell
-java -jar merge_sort.jar -d -s out.txt in1.txt in2.txt (для строк по убыванию);
-```
-```shell
-java -jar merge_sort.jar --desc --string out.txt in1.txt in2.txt (для строк по убыванию);
-```
-```shell
-java -jar merge_sort.jar -h (вызов справки);
-```
-```shell
-java -jar merge_sort.jar --help (вызов справки);
+java -jar merge_sort.jar --help;
 ```
 
 
